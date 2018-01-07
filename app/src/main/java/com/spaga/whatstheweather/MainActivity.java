@@ -32,11 +32,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         cityName = findViewById(R.id.cityName);
-        findWeather = findViewById(R.id.findWeather);
+        /*findWeather = findViewById(R.id.findWeather);
 
         DownloadTask task = new DownloadTask();
         task.execute("http://samples.openweathermap.org/data/2.5/weather?q=London,uk&appid=" +
-                "b6907d289e10d714a6e88b30761fae22");
+                "b6907d289e10d714a6e88b30761fae22");*/
     }
 
     public class DownloadTask extends AsyncTask<String, Void, String> {
@@ -79,7 +79,6 @@ public class MainActivity extends AppCompatActivity {
                     JSONObject jsonPart = array.getJSONObject(i);
                     Log.i("main", jsonPart.getString("main"));
                     Log.i("description", jsonPart.getString("description"));
-
                 }
 
             } catch (JSONException e) {
