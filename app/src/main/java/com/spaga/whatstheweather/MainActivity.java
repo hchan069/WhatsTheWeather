@@ -74,6 +74,8 @@ public class MainActivity extends AppCompatActivity {
                 JSONObject jsonObject = new JSONObject(result);
                 String weatherInfo = jsonObject.getString("weather");
 
+                Log.i("Weather Content: ", weatherInfo);
+
                 JSONArray array = new JSONArray(weatherInfo);
 
                 for (int i = 0; i < array.length(); i++) {
