@@ -26,7 +26,8 @@ public class MainActivity extends AppCompatActivity {
         Log.i("cityName", cityName.getText().toString());
 
         DownloadTask task = new DownloadTask();
-        task.execute("api.openweathermap.org/data/2.5/weather?q=" + cityName.getText().toString());
+        task.execute("http://samples.openweathermap.org/data/2.5/weather?q= " +
+                cityName.getText().toString() + "&appid=b6907d289e10d714a6e88b30761fae22");
     }
 
     @Override
@@ -36,7 +37,6 @@ public class MainActivity extends AppCompatActivity {
 
         cityName = findViewById(R.id.cityName);
         findWeather = findViewById(R.id.findWeather);
-
 
     }
 
