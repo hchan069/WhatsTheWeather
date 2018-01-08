@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -21,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
 
     EditText cityName;
     Button findWeather;
+    TextView resultTextView;
 
     public void findWeather(View view) {
         Log.i("cityName", cityName.getText().toString());
@@ -37,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
 
         cityName = findViewById(R.id.cityName);
         findWeather = findViewById(R.id.findWeather);
-
+        resultTextView = findViewById(R.id.resultTextView);
     }
 
     public class DownloadTask extends AsyncTask<String, Void, String> {
@@ -71,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
             super.onPostExecute(result);
 
             try {
+                String message = "";
                 JSONObject jsonObject = new JSONObject(result);
                 String weatherInfo = jsonObject.getString("weather");
 
@@ -80,9 +83,18 @@ public class MainActivity extends AppCompatActivity {
 
                 for (int i = 0; i < array.length(); i++) {
                     JSONObject jsonPart = array.getJSONObject(i);
-                    Log.i("main", jsonPart.getString("main"));
-                    Log.i("description", jsonPart.getString("description"));
+                    String main = "";
+                    String description = "";
+
+                    main = jsonPart.getString("main");
+                    description = jsonPart.getString("description");
+
+                    if (main != "" && description != "")
+                        message += main + ": " + description + "\r\n";
                 }
+
+                if (message != "")
+                    resultTextView.setText(message);
 
             } catch (JSONException e) {
                 e.printStackTrace();
