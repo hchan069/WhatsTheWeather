@@ -1,13 +1,16 @@
 package com.spaga.whatstheweather;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -15,8 +18,10 @@ import org.json.JSONObject;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -25,11 +30,23 @@ public class MainActivity extends AppCompatActivity {
     TextView resultTextView;
 
     public void findWeather(View view) {
-        Log.i("cityName", cityName.getText().toString());
+        String enteredCityName = cityName.getText().toString();
+        Log.i("cityName", enteredCityName);
 
-        DownloadTask task = new DownloadTask();
-        task.execute("http://samples.openweathermap.org/data/2.5/weather?q= " +
-                cityName.getText().toString() + "&appid=b6907d289e10d714a6e88b30761fae22");
+        InputMethodManager mgr = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        mgr.hideSoftInputFromWindow(cityName.getWindowToken(), 0);
+
+        try {
+            String encodedCityName = URLEncoder.encode(enteredCityName, "UTF-8");
+            DownloadTask task = new DownloadTask();
+            task.execute("http://api.openweathermap.org/data/2.5/weather?q=" +
+                    encodedCityName + "&appid=810d344a1a6541fb687b631118a1e2a0");
+        } catch (UnsupportedEncodingException e) {
+            Toast.makeText(MainActivity.this, "Could not find weather",
+                    Toast.LENGTH_LONG).show();
+        }
+
+
     }
 
     @Override
@@ -63,7 +80,8 @@ public class MainActivity extends AppCompatActivity {
                 return result;
 
             } catch (Exception e) {
-                e.printStackTrace();
+                Toast.makeText(MainActivity.this, "Could not find weather",
+                        Toast.LENGTH_LONG).show();
             }
             return result;
         }
@@ -95,9 +113,13 @@ public class MainActivity extends AppCompatActivity {
 
                 if (message != "")
                     resultTextView.setText(message);
+                else
+                    Toast.makeText(MainActivity.this, "Could not find weather",
+                            Toast.LENGTH_LONG).show();
 
             } catch (JSONException e) {
-                e.printStackTrace();
+                Toast.makeText(MainActivity.this, "Could not find weather",
+                        Toast.LENGTH_LONG).show();
             }
         }
     }
